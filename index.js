@@ -32,6 +32,19 @@ async function main() {
 	let loop = true;
 
 	do {
+		const option = Number(await showMenu());
+
+		try {
+			switch (option) {
+				default: {
+					//invalid option
+					console.log("Invalid option\n");
+				}
+			}
+		} catch (error) {
+			console.error("An error occured: ", error);
+			console.log("\n");
+		}
 
 	} while (loop);
 
