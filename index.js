@@ -68,6 +68,17 @@ async function main() {
 					break;
 				}
 
+				case 3: {
+					//Delete user
+					console.log("Delete user");
+					const username = await readVal("Enter username of user to delete: ");
+
+					await sql`DELETE FROM users WHERE username = ${username};`;
+					console.log("User successfully deleted.\n");
+
+					break;
+				}
+
 				default: {
 					//invalid option
 					console.log("Invalid option\n");
