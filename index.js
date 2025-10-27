@@ -25,5 +25,17 @@ async function createUser() {
 	const year = Number(await readVal("Enter year in dob: "));
 	const dob = new Date(year, month - 1, day + 1); //month is 0 indexed in JS Date object
 
-	return { name, username, email, dob: dob.toDateString() }
+	return { name, username, email, dob: dob.toDateString() };
 }
+
+async function main() {
+	let loop = true;
+
+	do {
+
+	} while (loop);
+
+	process.exit(0);
+}
+
+await main();
