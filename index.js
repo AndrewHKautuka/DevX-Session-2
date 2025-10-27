@@ -1,6 +1,6 @@
 import { stdin, stdout } from "process";
 import readline from "readline/promises";
-import { sql } from "./constants/db";
+import { sql } from "./constants/db.js";
 
 const rl = readline.createInterface({
 	input: stdin,
