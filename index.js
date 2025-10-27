@@ -13,7 +13,13 @@ async function readVal(p) {
 }
 
 async function showMenu() {
-	const res = await readVal("1. Show available users \n2. Create a new user \n3. Delete user\n4. Exit \nChoose an option: ");
+	const res = await readVal(`
+1. Show available users
+2. Create a new user
+3. Delete user
+4. Exit
+Choose an option: `);
+
 	return res;
 }
 
