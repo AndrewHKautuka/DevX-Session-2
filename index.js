@@ -1,5 +1,6 @@
 import { stdin, stdout } from "process";
 import readline from "readline/promises";
+import { sql } from "./constants/db";
 
 const rl = readline.createInterface({
 	input: stdin,
@@ -36,6 +37,26 @@ async function main() {
 
 		try {
 			switch (option) {
+				case 1: {
+					//get all users and display
+					const users = await sql`SELECT * FROM users;`;
+
+					console.log("\nAvailable users:");
+
+					if (users.length === 0) {
+						console.log("No users found.\n");
+						break;
+					}
+
+					users.forEach((user, index) => {
+						console.log(`${index + 1} : ${JSON.stringify(user)}`);
+					});
+
+					console.log("\n");
+
+					break;
+				}
+
 				default: {
 					//invalid option
 					console.log("Invalid option\n");
