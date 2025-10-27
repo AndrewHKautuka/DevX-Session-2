@@ -57,6 +57,17 @@ async function main() {
 					break;
 				}
 
+				case 2: {
+					//create new user
+					console.log("Create new user");
+					const user = await createUser();
+
+					await sql`INSERT INTO users (name, dob, username, email) VALUES(${user.name}, ${user.dob}, ${user.username}, ${user.email})`;
+					console.log("User added successfully!\n")
+
+					break;
+				}
+
 				default: {
 					//invalid option
 					console.log("Invalid option\n");
