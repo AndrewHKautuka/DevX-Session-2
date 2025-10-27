@@ -16,9 +16,10 @@ async function showMenu() {
 	const res = await readVal(`
 1. Show available users
 2. Create a new user
-3. Edit existing user
-4. Delete user
-5. Exit
+3. Search for user
+4. Edit existing user
+5. Delete user
+6. Exit
 Choose an option: `);
 
 	return res;
@@ -36,11 +37,13 @@ async function createUser() {
 	return { name, username, email, dob: dob.toDateString() };
 }
 
-async function editUser(user) {
-	console.log(`Current name: ${user.name}`)
-	console.log(`Current email: ${user.email}`)
-	console.log(`Current dob: ${new Date(user.dob).toLocaleDateString()}\n`)
+async function showUser(user) {
+	console.log(`Current name: ${user.name}`);
+	console.log(`Current email: ${user.email}`);
+	console.log(`Current dob: ${new Date(user.dob).toLocaleDateString()}\n`);
+}
 
+async function editUser() {
 	const name = await readVal("Edit name: ");
 	const email = await readVal("Edit email: ");
 	const day = Number(await readVal("Edit day in dob: "))
@@ -91,6 +94,22 @@ async function main() {
 				}
 
 				case 3: {
+					//Search for user
+					console.log("Search for user");
+					const username = await readVal("Enter username of user to search for: ");
+					const user = (await sql`SELECT * FROM users WHERE username = ${username};`)[0];
+
+					if (!user) {
+						console.log(`No user with username "${username}" found.\n`);
+						break;
+					}
+
+					await showUser(user);
+
+					break;
+				}
+
+				case 4: {
 					//Edit user
 					console.log("Edit existing user");
 					const username = await readVal("Enter username of user to edit: ");
@@ -101,15 +120,15 @@ async function main() {
 						break;
 					}
 
-					const updated_user = await editUser(current_user)
-					console.log(updated_user)
+					await showUser(current_user);
+					const updated_user = await editUser()
 
 					await sql`UPDATE users SET name = ${updated_user.name}, dob = ${updated_user.dob}, email = ${updated_user.email} WHERE username = ${current_user.username}`;
 
 					break;
 				}
 
-				case 4: {
+				case 5: {
 					//Delete user
 					console.log("Delete user");
 					const username = await readVal("Enter username of user to delete: ");
@@ -120,7 +139,7 @@ async function main() {
 					break;
 				}
 
-				case 5: {
+				case 6: {
 					//Exit
 					loop = false;
 					console.log("Exiting...\n");
