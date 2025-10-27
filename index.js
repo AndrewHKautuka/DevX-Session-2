@@ -16,8 +16,9 @@ async function showMenu() {
 	const res = await readVal(`
 1. Show available users
 2. Create a new user
-3. Delete user
-4. Exit
+3. Edit existing user
+4. Delete user
+5. Exit
 Choose an option: `);
 
 	return res;
@@ -33,6 +34,21 @@ async function createUser() {
 	const dob = new Date(year, month - 1, day + 1); //month is 0 indexed in JS Date object
 
 	return { name, username, email, dob: dob.toDateString() };
+}
+
+async function editUser(user) {
+	console.log(`Current name: ${user.name}`)
+	console.log(`Current email: ${user.email}`)
+	console.log(`Current dob: ${new Date(user.dob).toLocaleDateString()}\n`)
+
+	const name = await readVal("Edit name: ");
+	const email = await readVal("Edit email: ");
+	const day = Number(await readVal("Edit day in dob: "))
+	const month = Number(await readVal("Edit month in dob(1 - 12): "));
+	const year = Number(await readVal("Edit year in dob: "));
+	const dob = new Date(year, month - 1, day + 1); //month is 0 indexed in JS Date object
+
+	return { name, email, dob: dob.toDateString() };
 }
 
 async function main() {
@@ -75,6 +91,25 @@ async function main() {
 				}
 
 				case 3: {
+					//Edit user
+					console.log("Edit existing user");
+					const username = await readVal("Enter username of user to edit: ");
+					const current_user = (await sql`SELECT * FROM users WHERE username = ${username};`)[0];
+
+					if (!current_user) {
+						console.log(`No user with username "${username}" found.\n`);
+						break;
+					}
+
+					const updated_user = await editUser(current_user)
+					console.log(updated_user)
+
+					await sql`UPDATE users SET name = ${updated_user.name}, dob = ${updated_user.dob}, email = ${updated_user.email} WHERE username = ${current_user.username}`;
+
+					break;
+				}
+
+				case 4: {
 					//Delete user
 					console.log("Delete user");
 					const username = await readVal("Enter username of user to delete: ");
@@ -85,7 +120,7 @@ async function main() {
 					break;
 				}
 
-				case 4: {
+				case 5: {
 					//Exit
 					loop = false;
 					console.log("Exiting...\n");
