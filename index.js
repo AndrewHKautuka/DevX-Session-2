@@ -38,7 +38,7 @@ async function createUser() {
 }
 
 async function showUser(user) {
-	console.log(`Current name: ${user.name}`);
+	console.log(`\nCurrent name: ${user.name}`);
 	console.log(`Current email: ${user.email}`);
 	console.log(`Current dob: ${new Date(user.dob).toLocaleDateString()}\n`);
 }
