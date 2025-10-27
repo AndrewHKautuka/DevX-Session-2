@@ -79,6 +79,13 @@ async function main() {
 					break;
 				}
 
+				case 4: {
+					//Exit
+					loop = false;
+					console.log("Exiting...\n");
+					break;
+				}
+
 				default: {
 					//invalid option
 					console.log("Invalid option\n");
