@@ -1,0 +1,44 @@
+body {
+	font-family: Arial, sans-serif;
+	background-color: lightblue;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	height: 100vh;
+}
+
+h1 {
+	color: #000;
+}
+
+#menu {
+	background-color: aliceblue;
+	border: 2px solid black;
+	padding-left: 1rem;
+	padding-right: 1rem;
+	width: fit-content;
+}
+
+#menu-buttons {
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+	margin-bottom: 1rem;
+}
+
+#menu-buttons>button {
+	font-size: large;
+	padding-top: 0.25rem;
+	padding-bottom: 0.25rem;
+	padding-left: 1rem;
+	padding-right: 1rem;
+}
+
+#content {
+	width: 80%;
+	margin: 2rem;
+	display: flex;
+	flex-direction: column;
+	flex-grow: 1;
+	align-items: center;
+}
