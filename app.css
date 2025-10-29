@@ -42,3 +42,20 @@ h1 {
 	flex-grow: 1;
 	align-items: center;
 }
+
+.table-label {
+	font-weight: 600;
+}
+
+th,
+td {
+	border: 1px solid black;
+	padding: 0.5rem;
+}
+
+table {
+	border: 1px solid black;
+	background-color: white;
+	border-collapse: collapse;
+	width: 100%;
+}
