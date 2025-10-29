@@ -4,12 +4,13 @@ import { dispatchRequest } from "./api.js";
 
 const server = createServer(async (request, response) => {
 	const url = request.url;
+	const method = request.method;
 	const api = "/api/"
 
-	if (url?.startsWith(api)) {
+	if (method && url?.startsWith(api)) {
 		const requestPath = url.slice(url.indexOf(api) + api.length)
 
-		const json = await dispatchRequest(requestPath);
+		const json = await dispatchRequest(method, requestPath);
 		response.setHeader('Content-Type', 'application/json');
 		response.statusCode = 200;
 		response.end(json);
