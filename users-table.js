@@ -1,7 +1,7 @@
 export function getUsersTable(users) {
 	const usersTable = document.createElement("table");
 
-	createTHead(usersTable, ["No", "Username", "Name", "Email", "Date of Birth"])
+	createTHead(usersTable, ["No.", "Username", "Name", "Email", "Date of Birth"])
 
 	users.forEach((user, index) => {
 		const row = usersTable.insertRow();
