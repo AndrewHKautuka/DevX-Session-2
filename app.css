@@ -26,7 +26,7 @@ h1 {
 	margin-bottom: 1rem;
 }
 
-#menu-buttons>button {
+button {
 	font-size: large;
 	padding-top: 0.25rem;
 	padding-bottom: 0.25rem;
