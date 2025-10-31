@@ -19,8 +19,18 @@ export async function dispatchUsersRequest(method, requestBody) {
 			return JSON.stringify(users);
 		}
 
+		case "POST": {
+			if (!requestBody) {
+				throwInvalidRequestBodyError();
+			}
+			const user = requestBody;
+			await sql`INSERT INTO users (name, dob, username, email) VALUES(${user.name}, ${user.dob}, ${user.username}, ${user.email})`;
+
+			return JSON.stringify({ message: "Successfully added user." });
+		}
+
 		default: {
-			throwInvalidMethodError("/api/users", ["GET"])
+			throwInvalidMethodError("/api/users", ["GET", "POST"])
 		}
 	}
 }
@@ -33,4 +43,8 @@ function throwInvalidMethodError(path, validMethods) {
 	}
 
 	throw Error(`Invalid method on ${path}.\nIt must be one of: ${methods.join(", ")}`);
+}
+
+function throwInvalidRequestBodyError() {
+	throw Error(`Expected JSON request body but was given null, undefined or was empty`);
 }
