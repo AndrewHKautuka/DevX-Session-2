@@ -1,6 +1,6 @@
 import { createFormInputs, createHeading, createSubmitButton } from "./form-utils.js";
 
-export function getUserSearch(sumbitFormCallback) {
+export function getUserSearch(searchLabel, sumbitFormCallback) {
 	const userSearchForm = document.createElement("form");
 
 	const heading = createHeading();
@@ -8,7 +8,7 @@ export function getUserSearch(sumbitFormCallback) {
 		{
 			id: "search",
 			type: "text",
-			label: "Username:",
+			label: searchLabel,
 			placeholder: "Username"
 		}
 	]);
