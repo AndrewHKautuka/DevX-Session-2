@@ -29,7 +29,7 @@ export function getCreateUserForm(sumbitFormCallback) {
 			label: "Date of Birth:"
 		}
 	]);
-	const submitButton = createSubmitButton(createUserForm);
+	const submitButton = createSubmitButton();
 
 	createUserForm.appendChild(heading);
 	createUserForm.appendChild(formInputs);
