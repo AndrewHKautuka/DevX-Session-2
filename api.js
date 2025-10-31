@@ -1,8 +1,8 @@
 import { sql } from "./constants/db.js";
 
 export async function dispatchRequest(method, requestPath, requestBody) {
-	switch (requestPath) {
-		case "users": {
+	switch (true) {
+		case requestPath?.startsWith("users"): {
 			return dispatchUsersRequest(method, requestBody)
 		}
 
