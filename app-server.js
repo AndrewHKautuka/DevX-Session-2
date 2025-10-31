@@ -10,8 +10,27 @@ const server = createServer(async (request, response) => {
 	if (method && url?.startsWith(api)) {
 		const requestPath = url.slice(url.indexOf(api) + api.length)
 
-		const json = await dispatchRequest(method, requestPath);
-		response.setHeader('Content-Type', 'application/json');
+		let requestBody = "";
+
+		// Wait for the request body to be fully received
+		for await (const chunk of request) {
+			requestBody += chunk.toString();
+		}
+
+		let parsedBody = requestBody
+		if (requestBody) {
+			try {
+				parsedBody = JSON.parse(requestBody);
+			} catch (error) {
+				console.error("Error parsing JSON:", error);
+				response.writeHead(400, { "Content-Type": "application/json" });
+				response.end(JSON.stringify({ error: "Invalid JSON" }));
+				return;
+			}
+		}
+
+		const json = await dispatchRequest(method, requestPath, parsedBody);
+		response.setHeader("Content-Type", "application/json");
 		response.statusCode = 200;
 		response.end(json);
 	} else {

@@ -1,9 +1,9 @@
 import { sql } from "./constants/db.js";
 
-export async function dispatchRequest(method, requestPath) {
+export async function dispatchRequest(method, requestPath, requestBody) {
 	switch (requestPath) {
 		case "users": {
-			return dispatchUsersRequest(method)
+			return dispatchUsersRequest(method, requestBody)
 		}
 
 		default: {
@@ -12,7 +12,7 @@ export async function dispatchRequest(method, requestPath) {
 	}
 }
 
-export async function dispatchUsersRequest(method) {
+export async function dispatchUsersRequest(method, requestBody) {
 	switch (method) {
 		case "GET": {
 			const users = await sql`SELECT * FROM users;`;
