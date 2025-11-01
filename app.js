@@ -1,4 +1,5 @@
 import { getCreateUserForm } from "./create-user-form.js";
+import { getEditUserForm } from "./edit-user-form.js";
 import { getUserBox } from "./user-box.js";
 import { getUserSearch } from "./user-search.js";
 import { getUsersTable } from "./users-table.js";
@@ -13,6 +14,9 @@ createUserButton.addEventListener("click", () => createUser());
 
 const searchUserButton = document.getElementById("button-search-user");
 searchUserButton.addEventListener("click", () => searchUser());
+
+const editUserButton = document.getElementById("button-edit-user");
+editUserButton.addEventListener("click", () => editUser());
 
 const deleteUserButton = document.getElementById("button-delete-user");
 deleteUserButton.addEventListener("click", () => deleteUser());
@@ -92,7 +96,7 @@ async function searchUser() {
 
 		const getUser = async (userData) => {
 			let username
-			console.log("UserData", userData)
+
 			if (userData instanceof FormData) {
 				username = userData.get("search");
 			} else {
@@ -130,6 +134,86 @@ async function searchUser() {
 	}
 }
 
+async function editUser() {
+	try {
+		const label = document.createElement("p");
+		label.className = "form-label";
+
+		let username
+
+		const getUser = async (userData) => {
+			if (userData instanceof FormData) {
+				username = userData.get("search");
+			} else {
+				username = userData.search
+			}
+
+			if (!username) {
+				label.textContent = "No username supplied";
+				return;
+			}
+
+			const response = await fetch(`api/users/${username}`, {
+				method: "GET",
+				headers: {
+					Accept: "application/json"
+				}
+			});
+
+			const content = [userSearch, label]
+			try {
+				const user = await response.json();
+				const editUserForm = getEditUserForm(user, patchUser);
+				label.textContent = "Successfully found user";
+				content.splice(1, 0, editUserForm);
+			} catch (error) {
+				label.textContent = "Failed to find user";
+			}
+			contentDiv.replaceChildren(...content);
+		};
+
+		const patchUser = async (userData) => {
+			let payload
+
+			if (userData instanceof FormData) {
+				payload = {};
+				for (const [key, value] of userData.entries()) {
+					if (payload[key]) {
+						// If key already exists, convert to array or push to existing array
+						if (!Array.isArray(payload[key])) {
+							payload[key] = [payload[key]];
+						}
+						payload[key].push(value);
+					} else {
+						payload[key] = value;
+					}
+				}
+			} else {
+				payload = userData
+			}
+
+			const response = await fetch(`api/users/${username}`, {
+				method: "PATCH",
+				body: JSON.stringify(payload),
+				headers: {
+					"Content-Type": "application/json"
+				}
+			});
+
+			if (!response.ok) {
+				label.textContent = "Failed to patch user";
+			} else {
+				label.textContent = "Successfully edited existing user";
+			}
+		};
+
+		const userSearch = getUserSearch("Find User:", getUser);
+		contentDiv.replaceChildren(userSearch, label);
+	} catch (error) {
+		console.log(error);
+	}
+}
+
 async function deleteUser() {
 	try {
 		const label = document.createElement("p");
@@ -137,7 +221,7 @@ async function deleteUser() {
 
 		const deleteUser = async (userData) => {
 			let username
-			console.log("UserData", userData)
+
 			if (userData instanceof FormData) {
 				username = userData.get("search");
 			} else {
