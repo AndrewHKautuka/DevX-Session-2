@@ -1,4 +1,6 @@
 import { getCreateUserForm } from "./create-user-form.js";
+import { getUserBox } from "./user-box.js";
+import { getUserSearch } from "./user-search.js";
 import { getUsersTable } from "./users-table.js";
 
 const contentDiv = document.getElementById("content");
@@ -8,6 +10,9 @@ showUsersButton.addEventListener("click", () => showUsers());
 
 const createUserButton = document.getElementById("button-create-user");
 createUserButton.addEventListener("click", () => createUser());
+
+const searchUserButton = document.getElementById("button-search-user");
+searchUserButton.addEventListener("click", () => searchUser());
 
 async function showUsers() {
 	try {
@@ -72,6 +77,51 @@ async function createUser() {
 
 		const createUserForm = getCreateUserForm(postUser);
 		contentDiv.replaceChildren(createUserForm, label);
+	} catch (error) {
+		console.log(error);
+	}
+}
+
+async function searchUser() {
+	try {
+		const label = document.createElement("p");
+		label.className = "form-label";
+
+		const getUser = async (userData) => {
+			let username
+			console.log("UserData", userData)
+			if (userData instanceof FormData) {
+				username = userData.get("search");
+			} else {
+				username = userData.search
+			}
+
+			if (!username) {
+				label.textContent = "No username supplied";
+				return;
+			}
+
+			const response = await fetch(`api/users/${username}`, {
+				method: "GET",
+				headers: {
+					Accept: "application/json"
+				}
+			});
+
+			const content = [userSearch, label]
+			try {
+				const user = await response.json();
+				const userBox = getUserBox(user);
+				label.textContent = "Successfully found user";
+				content.splice(1, 0, userBox);
+			} catch (error) {
+				label.textContent = "Failed to find user";
+			}
+			contentDiv.replaceChildren(...content);
+		};
+
+		const userSearch = getUserSearch("Search User:", getUser);
+		contentDiv.replaceChildren(userSearch, label);
 	} catch (error) {
 		console.log(error);
 	}
