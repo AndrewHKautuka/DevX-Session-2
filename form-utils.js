@@ -1,8 +1,4 @@
-export function createHeading(text) {
-	const heading = document.createElement("h3");
-	heading.textContent = text;
-	return heading;
-}
+import { addLabel } from "./component-utils.js";
 
 export function createFormInputs(id, inputs) {
 	const formInputs = document.createElement("div");
@@ -18,13 +14,6 @@ export function createFormInputs(id, inputs) {
 	});
 
 	return formInputs;
-}
-
-function addLabel(parent, htmlFor, content) {
-	const label = document.createElement("label");
-	label.htmlFor = htmlFor;
-	label.textContent = content;
-	parent.appendChild(label);
 }
 
 function addInput(parent, id, placeholder) {

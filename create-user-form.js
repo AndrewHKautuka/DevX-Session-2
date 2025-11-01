@@ -1,4 +1,5 @@
-import { createFormInputs, createHeading, createSubmitButton } from "./form-utils.js";
+import { createHeading } from "./component-utils.js";
+import { createFormInputs, createSubmitButton } from "./form-utils.js";
 
 export function getCreateUserForm(sumbitFormCallback) {
 	const createUserForm = document.createElement("form");
