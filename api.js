@@ -1,10 +1,10 @@
 import { sql } from "./constants/db.js";
 
 export async function dispatchRequest(method, requestPath, requestBody) {
-	const usersPath = "users"
+	const usersPath = "users";
 	switch (true) {
 		case requestPath?.startsWith(usersPath): {
-			return dispatchUsersRequest(method, requestPath.slice(usersPath.length + 1), requestBody)
+			return dispatchUsersRequest(method, requestPath.slice(usersPath.length + 1), requestBody);
 		}
 
 		default: {
@@ -36,6 +36,16 @@ export async function dispatchUsersRequest(method, requestSubPath, requestBody) 
 			return JSON.stringify({ message: "Successfully added user." });
 		}
 
+		case "DELETE": {
+			if (!requestSubPath) {
+				throw new Error("No username supplied for delete operation");
+			}
+
+			const username = requestSubPath.split("/")[0];
+			await sql`DELETE FROM users WHERE username = ${username};`;
+			return JSON.stringify({ message: "Successfully deleted user." });
+		}
+
 		default: {
 			throwInvalidMethodError("/api/users", ["GET", "POST"])
 		}
@@ -46,7 +56,7 @@ function throwInvalidMethodError(path, validMethods) {
 	const methods = validMethods;
 
 	if (methods.length > 1) {
-		methods[methods.length - 1] = "and ".concat([methods.length - 1])
+		methods[methods.length - 1] = "and ".concat([methods.length - 1]);
 	}
 
 	throw Error(`Invalid method on ${path}.\nIt must be one of: ${methods.join(", ")}`);
