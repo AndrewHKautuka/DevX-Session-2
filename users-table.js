@@ -2,6 +2,7 @@ import { createCell, createTHead } from "./table-utils.js";
 
 export function getUsersTable(users) {
 	const usersTable = document.createElement("table");
+	usersTable.id = "users-table";
 
 	createTHead(usersTable, ["No.", "Username", "Name", "Email", "Date of Birth"])
 
