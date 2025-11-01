@@ -14,6 +14,9 @@ createUserButton.addEventListener("click", () => createUser());
 const searchUserButton = document.getElementById("button-search-user");
 searchUserButton.addEventListener("click", () => searchUser());
 
+const deleteUserButton = document.getElementById("button-delete-user");
+deleteUserButton.addEventListener("click", () => deleteUser());
+
 async function showUsers() {
 	try {
 		const response = await fetch("api/users", {
@@ -121,6 +124,39 @@ async function searchUser() {
 		};
 
 		const userSearch = getUserSearch("Search User:", getUser);
+		contentDiv.replaceChildren(userSearch, label);
+	} catch (error) {
+		console.log(error);
+	}
+}
+
+async function deleteUser() {
+	try {
+		const label = document.createElement("p");
+		label.className = "form-label";
+
+		const deleteUser = async (userData) => {
+			let username
+			console.log("UserData", userData)
+			if (userData instanceof FormData) {
+				username = userData.get("search");
+			} else {
+				username = userData.search
+			}
+
+			if (!username) {
+				label.textContent = "No username supplied";
+				return;
+			}
+
+			await fetch(`api/users/${username}`, {
+				method: "DELETE"
+			});
+
+			label.textContent = `Deleted user with username ${username}`;
+		};
+
+		const userSearch = getUserSearch("Delete User:", deleteUser);
 		contentDiv.replaceChildren(userSearch, label);
 	} catch (error) {
 		console.log(error);
