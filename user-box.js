@@ -3,6 +3,7 @@ import { createCell } from "./table-utils.js";
 export function getUserBox(user) {
 	const userBox = document.createElement("table");
 	userBox.id = "user-box";
+	userBox.className = "middle-content-child";
 
 	const usernameRow = userBox.insertRow();
 	createCell(usernameRow, "Username:");

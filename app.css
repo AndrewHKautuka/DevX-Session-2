@@ -99,10 +99,13 @@ form>button {
 	font-size: large;
 }
 
+.middle-content-child {
+	margin-top: 2rem;
+}
+
 #user-box {
 	border: 1px solid black;
 	background-color: white;
-	margin-top: 2rem;
 }
 
 #user-box * {
