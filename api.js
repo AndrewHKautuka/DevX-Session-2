@@ -16,8 +16,14 @@ export async function dispatchRequest(method, requestPath, requestBody) {
 export async function dispatchUsersRequest(method, requestSubPath, requestBody) {
 	switch (method) {
 		case "GET": {
-			const users = await sql`SELECT * FROM users;`;
-			return JSON.stringify(users);
+			if (requestSubPath) {
+				const username = requestSubPath.split("/")[0];
+				const user = (await sql`SELECT * FROM users WHERE username = ${username};`)[0];
+				return JSON.stringify(user);
+			} else {
+				const users = await sql`SELECT * FROM users;`;
+				return JSON.stringify(users);
+			}
 		}
 
 		case "POST": {
