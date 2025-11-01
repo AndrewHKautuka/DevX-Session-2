@@ -30,10 +30,27 @@ export async function dispatchUsersRequest(method, requestSubPath, requestBody) 
 			if (!requestBody) {
 				throwInvalidRequestBodyError();
 			}
+
 			const user = requestBody;
 			await sql`INSERT INTO users (name, dob, username, email) VALUES(${user.name}, ${user.dob}, ${user.username}, ${user.email})`;
 
 			return JSON.stringify({ message: "Successfully added user." });
+		}
+
+		case "PATCH": {
+			if (!requestSubPath) {
+				throw new Error("No username supplied for patch operation");
+			}
+
+			if (!requestBody) {
+				throwInvalidRequestBodyError();
+			}
+
+			const username = requestSubPath.split("/")[0];
+			const updated_user = requestBody;
+
+			await sql`UPDATE users SET name = ${updated_user.name}, dob = ${updated_user.dob}, email = ${updated_user.email} WHERE username = ${username}`;
+			return JSON.stringify({ message: "Successfully edited user." });
 		}
 
 		case "DELETE": {
